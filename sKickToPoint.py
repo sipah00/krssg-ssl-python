@@ -28,6 +28,7 @@ def execute(param, state, bot_id, pub):
 
     if dist > BOT_BALL_THRESH :
         sGoToBall.execute(param, state, bot_id, pub)
+        return
 
     if math.fabs(turnAngleLeft) > SATISFIABLE_THETA/2 : # SATISFIABLE_THETA in config file
         sParam = skills_union.SParam()
@@ -35,6 +36,7 @@ def execute(param, state, bot_id, pub):
         sParam.TurnToPointP.y = destPoint.y
         sParam.TurnToPointP.max_omega = MAX_BOT_OMEGA*3
         sTurnToPoint.execute(sParam, state, bot_id, pub)
+        return
 
     skill_node.send_command(pub, state.isteamyellow, bot_id ,0, 0, 0, param.KickToPointP.power, False)
 
