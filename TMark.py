@@ -26,10 +26,10 @@ class TMark(Tactic):
         self.sParam = skills_union.SParam()
 
     def execute(self, state, pub):
-        botpos = Vector2D(state.homePos[self.bot_id].x, state.homePos[self.bot_id].y)
-        ballPos = Vector2D(state.ballPos.x, state.ballPos.y)
-        markedPos = Vector2D(state.homePos[self.param.MarkBotP.awayBotID].x, state.homePos[self.param.MarkBotP.awayBotID].y)
-        ballVel = Vector2D(state.ballVel.x , state.ballVel.y)
+        botpos = Vector2D(int(state.homePos[self.bot_id].x), int(state.homePos[self.bot_id].y))
+        ballPos = Vector2D(int(state.ballPos.x), int(state.ballPos.y))
+        markedPos = Vector2D(int(state.homePos[self.param.MarkBotP.awayBotID].x), int(state.homePos[self.param.MarkBotP.awayBotID].y))
+        ballVel = Vector2D(int(state.ballVel.x) , int(state.ballVel.y))
         guardPos = Vector2D()
         v = Vector2D()
 
@@ -37,7 +37,7 @@ class TMark(Tactic):
         passer_dist = 99999999999999
 
         for oppID in range(4):
-            oppPos = Vector2D(state.homePos[oppID].x, state.homePos[oppID].y)
+            oppPos = Vector2D(int(state.homePos[oppID].x), int(state.homePos[oppID].y))
             kick_range_test = v.absSq((oppPos - ballPos))
 
             if kick_range_test < KICK_RANGE_THRESH and kick_range_test < passer_dist:
@@ -47,18 +47,18 @@ class TMark(Tactic):
         if passer != -1:
             if fabs(ballPos.x - markedPos.x) > fabs(ballPos.y - markedPos.y):
                 if ballPos.x > markedPos.x:
-                    guardPos.x = markedPos.x + DBOX_WIDTH/4
+                    guardPos.x = int(markedPos.x + DBOX_WIDTH/4)
                 else:
-                    guardPos.x = markedPos.x - DBOX_WIDTH/4
+                    guardPos.x = int(markedPos.x - DBOX_WIDTH/4)
 
             guardPos.y = ( ((state.ballPos.y - state.awayPos[passer].y) / (state.ballPos.x - state.awayPos[passer].x)) * (guardPos.x - state.ballPos.x) ) + state.ballPos.y
         else:
             if ballPos.y > markedPos.y:
-                guardPos.y = markedPos.y + DBOX_WIDTH/4
+                guardPos.y = int(markedPos.y + DBOX_WIDTH/4)
             else:
-                guardPos.y = markedPos.y - DBOX_WIDTH/4
+                guardPos.y = int(markedPos.y - DBOX_WIDTH/4)
 
-            guardPos.x = ( ((markedPos.x - state.ballPos.x) / (markedPos.y - state.ballPos.y)) * (guardPos.y - state.ballPos.y) ) + state.ballPos.x
+            guardPos.x = int(( ((markedPos.x - state.ballPos.x) / (markedPos.y - state.ballPos.y)) * (guardPos.y - state.ballPos.y) ) + state.ballPos.x)
 
 
         self.sParam.GoToPointP.x             = guardPos.x
@@ -70,13 +70,7 @@ class TMark(Tactic):
         self.sParam.GoToPointP.finalslope    = angleToTurn
         self.sParam.GoToPointP.finalVelocity = 0
 
-        print("before calling")
-        print(self.sParam.GoToPointP.x)
-        print("\n")
-        print(self.sParam.GoToPointP.y)
-
         sGoToPoint.execute(self.sParam, state, self.bot_id, pub)
-        print("after calling")
 
 
     def isComplete(self, state):
@@ -91,7 +85,4 @@ class TMark(Tactic):
     def updateParams(self, state):
         # No parameter to update here
         pass
-
-
-
 
