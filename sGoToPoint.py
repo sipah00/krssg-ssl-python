@@ -26,7 +26,7 @@ def debug(param, state, bot_pos, target_pos, nextWP, nextNWP, speed, theta, omeg
     print '#'*50
 
 
-def execute(param,state,bot_id, pub,dribller = False):
+def execute(param,state,bot_id, pub,dribller = False, ball_obstacle=False):
     obs = Vector_Obstacle()
     for i in range(0,len(state.homeDetected)):
         if state.homeDetected[i] and i != bot_id:
@@ -43,7 +43,13 @@ def execute(param,state,bot_id, pub,dribller = False):
             o.y=state.awayPos[j].y
             o.radius=3.3*BOT_RADIUS
             obs.push_back(o)
-
+    if(ball_obstacle):
+            print "HOLA_____BALL,OBSTACLE"
+            o=Obstacle()
+            o.x=state.ballPos.x
+            o.y=state.ballPos.y
+            o.radius=2*BOT_RADIUS
+            obs.push_back(o)          
 
     pointPos = Vector2D()
     pointPos.x = int(param.GoToPointP.x)
@@ -73,9 +79,9 @@ def execute(param,state,bot_id, pub,dribller = False):
 
     if omega < MIN_BOT_OMEGA and omega > -MIN_BOT_OMEGA:
         if omega < 0:
-            omega = -MIN_BOT_OMEGA
+            omega = -1.5*MIN_BOT_OMEGA
         else:
-            omega = MIN_BOT_OMEGA
+            omega = +1.5*MIN_BOT_OMEGA
 
     from math import exp
 
@@ -84,6 +90,7 @@ def execute(param,state,bot_id, pub,dribller = False):
         speed=2*MIN_BOT_SPEED
     if  (speed > MAX_BOT_SPEED):
         speed=MAX_BOT_SPEED    
+    # omega = 0
   
     vec = Vector2D()
 
@@ -92,7 +99,7 @@ def execute(param,state,bot_id, pub,dribller = False):
     theta  = motionAngle - state.homePos[bot_id].theta
     if param.GoToPointP.align == False:
         if distan < DRIBBLER_BALL_THRESH:
-            if distan < BOT_BALL_THRESH:
+            if distan < BOT_BALL_THRESH/4.0:
                 skill_node.send_command(pub, state.isteamyellow, bot_id, 0, 0, omega, 0,dribller)
               
             else:
@@ -100,9 +107,8 @@ def execute(param,state,bot_id, pub,dribller = False):
         else:
             skill_node.send_command(pub, state.isteamyellow, bot_id, speed * math.sin(-theta), speed * math.cos(-theta), omega, 0, dribller)
     else:
-        if distan > BOT_BALL_THRESH:
+        if distan > BOT_BALL_THRESH/4.0:
             skill_node.send_command(pub, state.isteamyellow, bot_id, speed * math.sin(-theta), speed * math.cos(-theta), omega, 0, dribller)
         else:
             skill_node.send_command(pub, state.isteamyellow, bot_id, 0, 0, omega, 0,dribller)
-
 
