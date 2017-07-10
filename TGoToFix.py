@@ -17,7 +17,7 @@ import sGoToBall
 import sGoToPoint
 import sDropBall
 
-TARGET_AREA_RADIUS = 10
+TARGET_AREA_RADIUS = 150
 
 class TGoToFix(Tactic):
     def __init__(self, bot_id, state,  param=None):
@@ -36,7 +36,7 @@ class TGoToFix(Tactic):
         MAXY = MAXY - BOT_RADIUS
 
 
-        if ballPos.dist(target) < 150:
+        if ballPos.dist(target) < TARGET_AREA_RADIUS:
             self.sParam.GoToPointP.x = MAXX - 1.5 * BOT_RADIUS
             self.sParam.GoToPointP.y = 0
             self.sParam.GoToPointP.finalslope = pi

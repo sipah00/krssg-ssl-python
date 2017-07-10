@@ -9,6 +9,7 @@ from tactic_factory import TStop
 from tactic_factory import TWall
 from utils import tactics_union
 from utils.robot_threads import robot_thread as thread
+from math import *
 
 CONST_DIST = 50
 
@@ -229,6 +230,7 @@ class ref_placement_blue(RefPlay):
         params1 = tactics_union.Param()
         params2 = tactics_union.Param()
         params3 = tactics_union.Param()
+        params  = tactics_union.Param()
         
         MAXX = HALF_FIELD_MAXX / 2
         MAXY = HALF_FIELD_MAXY * 2  - (HALF_FIELD_MAXY * 2  - 8 * BOT_RADIUS) / 2
@@ -239,13 +241,13 @@ class ref_placement_blue(RefPlay):
 
         params1.PositionP.x = MAXX
 
-        MAXY = MAXY - 2*2 * BOT_RADIUS
+        MAXY = MAXY - 2.2 * BOT_RADIUS
 
         params1.PositionP.y = MAXY
 
         params2.PositionP.x = MAXX
 
-        MAXY = MAXY - 2*2 * BOT_RADIUS
+        MAXY = MAXY - 2.2 * BOT_RADIUS
 
         params2.PositionP.y = MAXY
 
@@ -255,8 +257,14 @@ class ref_placement_blue(RefPlay):
         
         params3.PositionP.y = MAXY
 
+        params0.PositionP.finalSlope = pi
+        params1.PositionP.finalSlope = pi
+        params2.PositionP.finalSlope = pi
+        params3.PositionP.finalSlope = pi 
+
+
         tactic = {0:"TPosition", 1:"TPosition", 2:"TPositon", 3:"TPosition", 4:"TGoalie", 5:"TGoToFix"}
-        params = {0:params0, 1:params1, 2:params2, 3:params, 4:params, 5:params}
+        params = {0:params0, 1:params1, 2:params2, 3:params3, 4:params, 5:params}
         RefPlay.__init__(self, state, tactic, params, publisher)
 
     def tactic_instance(self):
