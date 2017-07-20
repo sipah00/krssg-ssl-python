@@ -1,7 +1,6 @@
 import skill_node
 import math
 import sys
-
 sys.path.append('../../../navigation_py/scripts/navigation/')
 sys.path.append('../../../plays_py/scripts/utils/')
 
